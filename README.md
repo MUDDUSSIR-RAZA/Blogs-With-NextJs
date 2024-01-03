@@ -1,2 +1,2 @@
-# Blogs-With-NextJs
+# Mini-Hackathon
  

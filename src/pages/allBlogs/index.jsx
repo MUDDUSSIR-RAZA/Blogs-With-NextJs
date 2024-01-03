@@ -203,10 +203,11 @@ export default function allBlogs({ data }) {
         )}
       </div>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps({ req }) {
+  const axios = require("axios");
   try {
     // Retrieve the token from the request cookie
     const token = req.headers.cookie
@@ -217,26 +218,33 @@ export async function getServerSideProps({ req }) {
       : null;
 
     if (token) {
-      return {
-        redirect: {
-          destination: "/DashBoard",
-          permanent: false,
-        },
-      };
-    }
-
-    const axios = require("axios");
-
-    try {
-      const { data } = await axios.get("http://localhost:5000/blog/allBlogs");
-      return {
-        props: { data },
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        props: {},
-      };
+      try {
+        await axios.get("http://localhost:5000/blog/userBlogs", {
+          headers: {
+            Cookie: token,
+          },
+        });
+        return {
+          redirect: {
+            destination: "/DashBoard",
+            permanent: false,
+          },
+        };
+      } catch (error) {
+        try {
+          const { data } = await axios.get(
+            "http://localhost:5000/blog/allBlogs"
+          );
+          return {
+            props: { data },
+          };
+        } catch (error) {
+          console.error(error);
+          return {
+            props: {},
+          };
+        }
+      }
     }
   } catch (error) {
     console.error("Error fetching data:", error);

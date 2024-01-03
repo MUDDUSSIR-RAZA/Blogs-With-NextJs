@@ -170,9 +170,7 @@ export async function getServerSideProps({ req }) {
       }
     }
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/blog/allBlogs"
-      );
+      const { data } = await axios.get("http://localhost:5000/blog/allBlogs");
       return {
         props: { data },
       };

@@ -313,7 +313,7 @@ export async function getServerSideProps({ req }) {
     const axios = require("axios");
 
     try {
-      const { data } = await axios.post("http://localhost:5000/blog/userBlogs", {
+      const { data } = await axios.get("http://localhost:5000/blog/userBlogs", {
         headers: {
           Cookie: token,
         },

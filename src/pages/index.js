@@ -12,12 +12,26 @@ export async function getServerSideProps({ req }) {
       : null;
 
     if (token) {
-      return {
-        redirect: {
-          destination: "/DashBoard",
-          permanent: false,
-        },
-      };
+      try {
+        await axios.get("http://localhost:5000/blog/userBlogs", {
+          headers: {
+            Cookie: token,
+          },
+        });
+        return {
+          redirect: {
+            destination: "/DashBoard",
+            permanent: false,
+          },
+        };
+      } catch (error) {
+        return {
+          redirect: {
+            destination: "/allBlogs",
+            permanent: false,
+          },
+        };
+      }
     }
 
     if (!token) {
@@ -28,10 +42,6 @@ export async function getServerSideProps({ req }) {
         },
       };
     }
-
-    return {
-      props: {},
-    };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {

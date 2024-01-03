@@ -1,6 +1,4 @@
 import { useRef } from "react";
-import { useRouter } from "next/router";
-import { getSession, useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MyHeader from "@/components/MyHeader";
@@ -52,9 +50,14 @@ export default function signup() {
     // }
 
     try {
-      const {data} = await axios.post("http://localhost:5000/auth/signup",{ firstName, lastName, email, password });
+      const { data } = await axios.post("http://localhost:5000/auth/signup", {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
 
-      window.location.replace('/auth/login');
+      window.location.replace("/auth/login");
       return;
     } catch (error) {
       console.error(`Sign up failed: ${error.response.data}`);
@@ -178,7 +181,6 @@ export default function signup() {
   );
 }
 
-
 export async function getServerSideProps({ req }) {
   try {
     const token = req.headers.cookie
@@ -189,12 +191,23 @@ export async function getServerSideProps({ req }) {
       : null;
 
     if (token) {
-      return {
-        redirect: {
-          destination: "/DashBoard",
-          permanent: false,
-        },
-      };
+      try {
+        await axios.get("http://localhost:5000/blog/userBlogs", {
+          headers: {
+            Cookie: token,
+          },
+        });
+        return {
+          redirect: {
+            destination: "/DashBoard",
+            permanent: false,
+          },
+        };
+      } catch (error) {
+        return {
+          props: {},
+        };
+      }
     }
 
     return {

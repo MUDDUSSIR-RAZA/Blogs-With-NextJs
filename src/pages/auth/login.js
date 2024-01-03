@@ -141,12 +141,23 @@ export async function getServerSideProps({ req }) {
       : null;
 
     if (token) {
-      return {
-        redirect: {
-          destination: "/DashBoard",
-          permanent: false,
-        },
-      };
+      try {
+        await axios.get("http://localhost:5000/blog/userBlogs", {
+          headers: {
+            Cookie: token,
+          },
+        });
+        return {
+          redirect: {
+            destination: "/DashBoard",
+            permanent: false,
+          },
+        };
+      } catch (error) {
+        return {
+          props: {},
+        };
+      }
     }
 
     return {

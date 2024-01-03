@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function allBlogs({ data }) {
   const allBlogs = data;
-  console.log(allBlogs);
   // const [isNoBlogsToastShown, setIsNoBlogsToastShown] = useState(false);
 
   // const [blogs, setBlogs] = useState([]);
